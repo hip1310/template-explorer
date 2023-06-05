@@ -1,5 +1,5 @@
 # MENTORG #
-Project Contails client and server both.
+Project contains client and server both.
 
 ## Software Dependencies / Prerequisites
 
@@ -9,6 +9,8 @@ As mentioned above, this project has several software dependences. Depending on 
 2. Your preferred text editor (I am currently uses VS Code, but this is not mandatory)
 
 ## Clone a repository
+
+Note: SourceTree is optional, you can also clone the repo directly.
 
 Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://bitbucket.org/harshpatel92/mentorg/src/master/).
 
