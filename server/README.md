@@ -7,7 +7,7 @@ Project - Contains every module to manage the mentorg.
 npm install
 ```
 
-## Running the Client Application
+## Running the server Application
 
 ```bash
 npm start
