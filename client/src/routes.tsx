@@ -14,7 +14,6 @@ const allRoutes = () => {
             <Route path="/" element={<Home />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFound />} />
-
           </Routes>
         </Suspense>
       </BrowserRouter>

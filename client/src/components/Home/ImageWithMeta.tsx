@@ -9,8 +9,6 @@ const renderMeta = (key: string, value: string) => {
   );
 };
 
-
-
 const ImageWithMeta = (currentImage: imageWithMetaType) => {
   return (
     <div id="large">
