@@ -4,6 +4,7 @@ Project Contails client and server both.
 ## Software Dependencies / Prerequisites
 
 As mentioned above, this project has several software dependences. Depending on how you setup your development environment, you'll need the following:
+
 1. Node (Version 18.x)
 2. Your preferred text editor (I am currently uses VS Code, but this is not mandatory)
 
