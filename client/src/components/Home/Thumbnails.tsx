@@ -11,6 +11,7 @@ type thumbnailsType = {
   onClickThumbnail: any;
   currentImageId: string;
 };
+
 const Thumbnails = ({
   thumbnails,
   currentPageNo,

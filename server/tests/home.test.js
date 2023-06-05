@@ -4,10 +4,12 @@ const { mockRequest, mockResponse } = require("../util/interceptor.js");
 describe("Home Controller", () => {
   let request;
   let response;
+
   beforeEach(async () => {
     request = mockRequest();
     response = mockResponse();
   });
+
   test("Get data without page number and page size", async () => {
     const responseObject = await controller.get(request, response);
     expect(responseObject.data).toHaveLength(10);

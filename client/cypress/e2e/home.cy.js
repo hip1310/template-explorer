@@ -26,11 +26,10 @@ describe("Home page", () => {
     cy.get(".next").should("have.class", "disabled");
   });
 
-  it("Click on thumbnail and show details",()=>{
+  it("Click on thumbnail and show details", () => {
     cy.get('[title="7112"]').click();
-    cy.get('[id="7112"]').should("have.text","ID # 7112")
-    
-  })
+    cy.get('[id="7112"]').should("have.text", "ID # 7112");
+  });
 
   it("go to last page", () => {
     //clicked three times because we have 15 records which will be divided by 4. So there will be 4 thumbnails in first 3 page and for 3 thumbnails in 4th page.
