@@ -5,6 +5,8 @@ Web Project - Contains every module to manage the mentorg web view.
 ## Installation
 ```bash
 npm install
+# or
+npm install --force
 ```
 Copy the environment and enter your sensitive data:
 
@@ -36,7 +38,7 @@ npm run cypress:open
 npm run cypress:run
 ```
 
-**Note: If not able to run cypress then please run below comand**
+**Note: If not able to run cypress then please run below command**
 ```bash
 npx cypress install --force
 ```
