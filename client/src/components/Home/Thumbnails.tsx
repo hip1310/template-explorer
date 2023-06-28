@@ -43,9 +43,21 @@ const Thumbnails = ({
     );
   };
 
+  const getTop = () => {
+    return document.getElementById("thumbnailsGroup")?.clientHeight! /2.5
+  };
+
+  const getWidth = (size: number) => {
+    if (size * CONSTANTS.MAX_THUMBNAILS > document.getElementById("thumbnailsGroup")?.clientWidth!) {
+        return document.getElementById("thumbnailsGroup")?.clientWidth! / CONSTANTS.MAX_THUMBNAILS - 20;
+      } else {
+        return size;
+      }
+  };
+
   return (
     <div className="thumbnails">
-      <div className="group">
+      <div className="group" id="thumbnailsGroup">
         {thumbnails &&
           thumbnails.map((element, key) => {
             return (
@@ -64,8 +76,8 @@ const Thumbnails = ({
                     require("../../images/thumbnails/" + element.thumbnail)
                   }
                   alt={element.thumbnail}
-                  width="145"
-                  height="121"
+                  width={CONSTANTS.MAX_THUMBNAILS > 4 ? getWidth(145) : 145}
+                  height={CONSTANTS.MAX_THUMBNAILS > 4 ? "auto" : 121}
                 />
                 <span>{element.id}</span>
               </Link>
@@ -74,6 +86,9 @@ const Thumbnails = ({
         <Link
           className={`previous ${isPreviousDisabled() ? "disabled" : ""}`}
           title="Previous"
+          style={{
+            top: getTop(),
+          }}
           onClick={() => {
             !isPreviousDisabled() && onPrevious();
           }}
@@ -84,6 +99,9 @@ const Thumbnails = ({
         <Link
           className={`next ${isNextDisabled() ? "disabled" : ""}`}
           title="Next"
+          style={{
+            top: getTop(),
+          }}
           onClick={() => {
             !isNextDisabled() && onNext();
           }}
