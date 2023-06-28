@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 8000;
 const homeRouter = require("./routes/home");
+const errorHandler = require("./exception/error-handler");
 
 // Define routes and middleware here
 app.use((req, res, next) => {
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/home", homeRouter);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

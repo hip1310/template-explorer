@@ -16,6 +16,13 @@ export type imageWithMetaType = {
   image: string;
 };
 
+export type queryParamType = {
+  searchTitle: string;
+  sortBy: "title" | "cost" | "id" | "description" | "thumbnail" | "image";
+  sortOrder: "asc" | "desc";
+  currentPageNo: number;
+};
+
 const Home = () => {
   const [currentImage, setCurrentImage] = useState<imageWithMetaType>({
     title: "",
@@ -26,9 +33,14 @@ const Home = () => {
     image: "",
   });
   const [thumbnails, setThumbnails] = useState([]);
-  const [currentPageNo, setCurrentPageNo] = useState(0);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
+  const [queryParams, setQueryParams] = useState<queryParamType>({
+    searchTitle: "",
+    sortBy: "title",
+    sortOrder: "asc",
+    currentPageNo: 0,
+  });
 
   useEffect(() => {
     const callApi = (pageNo: number) => {
@@ -36,6 +48,10 @@ const Home = () => {
       const params = new URLSearchParams({
         page: pageNo.toString(),
         size: CONSTANTS.MAX_THUMBNAILS.toString(),
+        //sort by can be ["title","cost","id","description","thumbnail","image"]
+        //sort directions can be asc/desc
+        sortBy: queryParams.sortBy + " " + queryParams.sortOrder,
+        searchTitle: queryParams.searchTitle,
       });
 
       //calling api with request params page and size
@@ -47,7 +63,7 @@ const Home = () => {
             //set new thumbnails according to pagination
             setThumbnails(thumbnails);
             //select 1st thumbnail
-            setCurrentImage(thumbnails[0]);
+            setCurrentImage(thumbnails.length > 0 ? thumbnails[0] : {});
             //set total records in thumbnails
             setTotal(res?.data?.total);
           }
@@ -59,24 +75,99 @@ const Home = () => {
     };
 
     //Calling callApi function on currentPageNo change
-    callApi(currentPageNo);
-  }, [currentPageNo, navigate]);
+    callApi(queryParams.currentPageNo);
+  }, [queryParams, navigate]);
+
+  const setCurrentPageNo = (value: number) => {
+    setQueryParams({ ...queryParams, currentPageNo: value });
+  };
+  const onChange = (key: string, value: string) => {
+    setQueryParams({ ...queryParams, [key]: value, currentPageNo: 0 });
+  };
+
+  const onReset = () => {
+    setQueryParams({
+      searchTitle: "",
+      sortBy: "title",
+      sortOrder: "asc",
+      currentPageNo: 0,
+    });
+  };
 
   return (
     <div id="container">
       <Header />
       <div id="main" role="main">
-        <ImageWithMeta {...currentImage} />
-        <Thumbnails
-          thumbnails={thumbnails}
-          currentPageNo={currentPageNo}
-          setCurrentPageNo={setCurrentPageNo}
-          total={total}
-          onClickThumbnail={(element: imageWithMetaType) => {
-            setCurrentImage(element);
-          }}
-          currentImageId={currentImage.id}
-        />
+        <div className="text-align-right margin-top-10-px">
+          <div>
+            Search Title :
+            <input
+              id="searchTitle"
+              type="text"
+              className="margin-left-10-px"
+              value={queryParams.searchTitle}
+              onChange={(element) => {
+                onChange(element.target.id, element.target.value);
+              }}
+            />
+            <input
+              className="margin-left-10-px"
+              type="button"
+              value="Reset All"
+              onClick={() => {
+                onReset();
+              }}
+            />
+          </div>
+          <div className="margin-top-10-px">
+            Sort by :
+            <select
+              id="sortBy"
+              className="margin-left-10-px margin-right-10-px"
+              value={queryParams.sortBy}
+              onChange={(element) => {
+                onChange(element.target.id, element.target.value);
+              }}
+            >
+              <option value="title">Title</option>
+              <option value="cost">Cost</option>
+              <option value="id">Id</option>
+              <option value="description">Description</option>
+              <option value="thumbnail">Thumbnail</option>
+              <option value="image">Image</option>
+            </select>
+            Sort order :
+            <select
+              id="sortOrder"
+              className="margin-left-10-px"
+              value={queryParams.sortOrder}
+              onChange={(element) => {
+                onChange(element.target.id, element.target.value);
+              }}
+            >
+              <option value="asc">Asc</option>
+              <option value="desc">Desc</option>
+            </select>
+          </div>
+        </div>
+
+        {thumbnails.length > 0 ? (
+          <>
+            <ImageWithMeta {...currentImage} />
+            <Thumbnails
+              thumbnails={thumbnails}
+              currentPageNo={queryParams.currentPageNo}
+              setCurrentPageNo={setCurrentPageNo}
+              total={total}
+              onClickThumbnail={(element: imageWithMetaType) => {
+                setCurrentImage(element);
+              }}
+              currentImageId={currentImage.id}
+            />
+          </>
+        ) : (
+          <>No Data found</>
+        )}
       </div>
       <Footer />
     </div>
