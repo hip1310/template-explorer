@@ -98,56 +98,66 @@ const Home = () => {
     <div id="container">
       <Header />
       <div id="main" role="main">
-        <div className="text-align-right margin-top-10-px">
-          <div>
-            Search Title :
-            <input
-              id="searchTitle"
-              type="text"
-              className="margin-left-10-px"
-              value={queryParams.searchTitle}
-              onChange={(element) => {
-                onChange(element.target.id, element.target.value);
-              }}
-            />
-            <input
-              className="margin-left-10-px"
-              type="button"
-              value="Reset All"
+        <div className="text-align-right">
+          <button onClick={()=>navigate("/add")} className="margin-top-10-px">Add Thumbnail</button>
+        </div>
+        <h3 className="padding-left-10-px">Filters</h3>
+        <div className="text-align-left margin-top-10-px">
+          <div className="row">
+            <div className="col-xs-6">
+              <p className="padding-left-10-px">Search Title :</p>
+              <input
+                id="searchTitle"
+                type="text"
+                className="margin-left-10-px"
+                value={queryParams.searchTitle}
+                onChange={(element) => {
+                  onChange(element.target.id, element.target.value);
+                }}
+              />
+            </div>
+            <div className="col-xs-2">
+              <p className="padding-left-10-px">Sort by :</p>
+              <select
+                id="sortBy"
+                className="margin-left-10-px margin-right-10-px"
+                value={queryParams.sortBy}
+                onChange={(element) => {
+                  onChange(element.target.id, element.target.value);
+                }}
+              >
+                <option value="title">Title</option>
+                <option value="cost">Cost</option>
+                <option value="id">Id</option>
+                <option value="description">Description</option>
+                <option value="thumbnail">Thumbnail</option>
+                <option value="image">Image</option>
+              </select>
+            </div>
+            <div className="col-xs-2">
+              <p className="padding-left-10-px">Sort order :</p>
+              <select
+                id="sortOrder"
+                className="margin-left-10-px"
+                value={queryParams.sortOrder}
+                onChange={(element) => {
+                  onChange(element.target.id, element.target.value);
+                }}
+              >
+                <option value="asc">Asc</option>
+                <option value="desc">Desc</option>
+              </select>
+            </div>
+          </div>
+          <div className="margin-top-10-px">
+            <button
+              className="margin-left-50-percent"
               onClick={() => {
                 onReset();
               }}
-            />
-          </div>
-          <div className="margin-top-10-px">
-            Sort by :
-            <select
-              id="sortBy"
-              className="margin-left-10-px margin-right-10-px"
-              value={queryParams.sortBy}
-              onChange={(element) => {
-                onChange(element.target.id, element.target.value);
-              }}
             >
-              <option value="title">Title</option>
-              <option value="cost">Cost</option>
-              <option value="id">Id</option>
-              <option value="description">Description</option>
-              <option value="thumbnail">Thumbnail</option>
-              <option value="image">Image</option>
-            </select>
-            Sort order :
-            <select
-              id="sortOrder"
-              className="margin-left-10-px"
-              value={queryParams.sortOrder}
-              onChange={(element) => {
-                onChange(element.target.id, element.target.value);
-              }}
-            >
-              <option value="asc">Asc</option>
-              <option value="desc">Desc</option>
-            </select>
+              Reset All
+            </button>
           </div>
         </div>
 

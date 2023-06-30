@@ -9,7 +9,7 @@ type thumbnailsType = {
   setCurrentPageNo: any;
   total: number;
   onClickThumbnail: any;
-  currentImageId: string;
+  currentImageId?: string;
 };
 
 const Thumbnails = ({
