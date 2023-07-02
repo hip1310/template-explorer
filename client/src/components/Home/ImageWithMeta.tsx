@@ -1,5 +1,6 @@
 import React from "react";
 import { imageWithMetaType } from "./Home";
+import { useNavigate } from "react-router-dom";
 
 const renderMeta = (key: string, value: string) => {
   return (
@@ -10,6 +11,7 @@ const renderMeta = (key: string, value: string) => {
 };
 
 const ImageWithMeta = (currentImage: imageWithMetaType) => {
+  const navigate = useNavigate();
   return (
     <div id="large">
       <div className="group">
@@ -29,6 +31,20 @@ const ImageWithMeta = (currentImage: imageWithMetaType) => {
           {renderMeta("ID #", currentImage.id)}
           {renderMeta("Thumbnail File", currentImage.thumbnail)}
           {renderMeta("Large Image File", currentImage.image)}
+        </div>
+        <div className="display-inline-block">
+          <button
+            onClick={() => navigate("/edit/" + currentImage.id)}
+            className="margin-top-10-px"
+          >
+            Edit Thumbnail
+          </button>
+          <button
+            onClick={() => currentImage.onDeleteThumbnail()}
+            className="margin-top-10-px"
+          >
+            Delete Thumbnail
+          </button>
         </div>
       </div>
     </div>

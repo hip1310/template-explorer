@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosAPI } from "../../services";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,19 +19,25 @@ const AddThumbnails = () => {
     thumbnail: "7111-m.jpg",
     image: "7111-b.jpg",
   });
+
   const navigate = useNavigate();
+  const params = useParams();
+  const isEdit = params.id;
 
   const addNewTemplate = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    axiosAPI
-      .post("/home/add", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    axiosAPI[isEdit ? "put" : "post"]("/home/add", data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => {
         if (res.status === 200) {
-          toast.success("Template added successfully!");
+          toast.success(
+            isEdit
+              ? "Template updated successfully!"
+              : "Template added successfully!"
+          );
           setTimeout(() => {
             navigate("/");
           }, 1500);
@@ -43,13 +49,36 @@ const AddThumbnails = () => {
       });
   };
 
+  useEffect(() => {
+    console.log(isEdit);
+    if (isEdit) {
+      const callApi = () => {
+        axiosAPI
+          .get(`/home/getById/${isEdit.toString()}`)
+          .then((res) => {
+            if (res.status === 200) {
+              const data = res?.data || {};
+              setData(data);
+            }
+          })
+          .catch(() => {
+            //If any error occurs during calling api then will navigate to error page
+            navigate("/error");
+          });
+      };
+      callApi();
+    }
+  }, []);
+
   const onChange = (key: string, value: string) => {
     setData({ ...data, [key]: value });
   };
   return (
     <>
       <ToastContainer />
-      <h2 className="margin-top-0 margin-bottom-30-px">Add Thumbnail</h2>
+      <h2 className="margin-top-0 margin-bottom-30-px">
+        {isEdit ? <>Edit Thumbnail</> : <>Add Thumbnail</>}
+      </h2>
       <form
         id="add-new-form"
         onSubmit={addNewTemplate}

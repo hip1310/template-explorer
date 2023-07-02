@@ -14,6 +14,7 @@ const allRoutes = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/add" element={<AddThumbnails />} />
+            <Route path="/edit/:id" element={<AddThumbnails />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

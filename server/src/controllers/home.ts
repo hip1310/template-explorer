@@ -52,6 +52,22 @@ export const get = async (req: any, res: any) => {
   return data;
 };
 
+export const getById = async (req: any, res: any) => {
+  const templateRepository = connectionPool.getRepository(Template);
+  const id = req.params?.id;
+
+  if (!id) {
+    throw new CustomError("ID_NOT_FOUND");
+  }
+
+  const data = await templateRepository.findOne({
+    where: { id: id },
+  });
+
+  res.status(200).send(data);
+  return data;
+};
+
 export const post = (req: any, res: any) => {
   const templateRepository = connectionPool.getRepository(Template);
   const { title, cost, description, thumbnail, image } = req.body;
@@ -63,6 +79,42 @@ export const post = (req: any, res: any) => {
     image: image,
   });
   templateRepository.save(template);
+  req.query.page = 0;
+  req.query.size = 4;
+  return get(req, res);
+};
+
+export const put = (req: any, res: any) => {
+  const templateRepository = connectionPool.getRepository(Template);
+  const { id, title, cost, description, thumbnail, image } = req.body;
+  templateRepository.update(
+    {
+      id: id,
+    },
+    {
+      title: title,
+      cost: cost,
+      description: description,
+      thumbnail: thumbnail,
+      image: image,
+    }
+  );
+  req.query.page = 0;
+  req.query.size = 4;
+  return get(req, res);
+};
+
+export const deleteTemplate = async (req: any, res: any) => {
+  const templateRepository = connectionPool.getRepository(Template);
+  const id = req.params?.id;
+
+  if (!id) {
+    throw new CustomError("ID_NOT_FOUND");
+  }
+
+  await templateRepository.delete({
+    id: id,
+  });
   req.query.page = 0;
   req.query.size = 4;
   return get(req, res);

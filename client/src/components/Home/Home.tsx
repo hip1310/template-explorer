@@ -6,6 +6,8 @@ import Header from "../Header";
 import Footer from "../Footer";
 import Thumbnails from "./Thumbnails";
 import ImageWithMeta from "./ImageWithMeta";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export type imageWithMetaType = {
   title: string;
@@ -14,6 +16,7 @@ export type imageWithMetaType = {
   id: string;
   thumbnail: string;
   image: string;
+  onDeleteThumbnail?: any;
 };
 
 export type queryParamType = {
@@ -94,12 +97,36 @@ const Home = () => {
     });
   };
 
+  const onDeleteThumbnail = () => {
+    axiosAPI
+      .delete(`/home/delete/${currentImage?.id?.toString()}`)
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success("Template deleted successfully!");
+          const thumbnails = res?.data?.data || [];
+          //set new thumbnails according to pagination
+          setThumbnails(thumbnails);
+          //select 1st thumbnail
+          setCurrentImage(thumbnails.length > 0 ? thumbnails[0] : {});
+          //set total records in thumbnails
+          setTotal(res?.data?.total);
+        }
+      })
+      .catch(() => {
+        //If any error occurs during calling api then will navigate to error page
+        navigate("/error");
+      });
+  };
+
   return (
     <div id="container">
       <Header />
+      <ToastContainer />
       <div id="main" role="main">
         <div className="text-align-right">
-          <button onClick={()=>navigate("/add")} className="margin-top-10-px">Add Thumbnail</button>
+          <button onClick={() => navigate("/add")} className="margin-top-10-px">
+            Add Thumbnail
+          </button>
         </div>
         <h3 className="padding-left-10-px">Filters</h3>
         <div className="text-align-left margin-top-10-px">
@@ -163,7 +190,10 @@ const Home = () => {
 
         {thumbnails.length > 0 ? (
           <>
-            <ImageWithMeta {...currentImage} />
+            <ImageWithMeta
+              {...currentImage}
+              onDeleteThumbnail={onDeleteThumbnail}
+            />
             <Thumbnails
               thumbnails={thumbnails}
               currentPageNo={queryParams.currentPageNo}
