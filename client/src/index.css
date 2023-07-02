@@ -71,7 +71,7 @@ header {
 	margin: 0 auto;
 	position: relative;
 	padding: 10px 45px;
-	width: 720px;
+	width: 760px;
 }
 
 .thumbnails a {
@@ -82,6 +82,16 @@ header {
 	text-align: center;
 	text-decoration: none;
 	margin-top: auto;
+}
+
+.thumbnails .first,
+.thumbnails .last {
+  float: none;
+  height: 24px;
+  position: absolute;
+  text-indent: -9999em;
+  top: 64px;
+  width: 24px;
 }
 
 .thumbnails img {
@@ -139,20 +149,41 @@ header {
 
 .previous {
 	background: url(./images/previous.png) no-repeat 0 0;
-	left: 10px;
+  left: 37px;
 }
 
 .next {
-	background: url(./images/next.png) no-repeat 0 0;
-	right: 10px;
+  background: url(./images/next.png) no-repeat 0 0;
+  right: 37px;
+}
+
+.first {
+  background: url(./images/first.png) no-repeat 0 0;
+  left: 10px;
+}
+
+.last {
+  background: url(./images/last.png) no-repeat 0 0;
+  right: 10px;
 }
 
 .previous:hover, .next:hover {
 	opacity: .6;
 }
 
-.previous:active, .next:active {
-	opacity: 1;
+.last:hover,
+.first:hover {
+  opacity: 0.6;
+}
+
+.previous:active,
+.next:active {
+  opacity: 1;
+}
+
+.last:active,
+.first:active {
+  opacity: 1;
 }
 
 .disabled {
@@ -169,4 +200,5 @@ footer {
 .group { zoom: 1;}
 .thumbnails .group{
 	display: flex; overflow: auto; 
+  justify-content: center;
 }

@@ -22,6 +22,14 @@ const Thumbnails = ({
   currentImageId,
   pageSize,
 }: thumbnailsType) => {
+  const onFirst = () => {
+    //Navigate to first page and will call api
+    setCurrentPageNo(0);
+  };
+  const onLast = () => {
+    //Navigate to last page and will call api
+    setCurrentPageNo(Math.ceil(total / pageSize) - 1);
+  };
   const onNext = () => {
     //Navigate to next page and will call api
     setCurrentPageNo(currentPageNo + 1);
@@ -39,7 +47,7 @@ const Thumbnails = ({
 
   const isNextDisabled = () => {
     //It will disable next button based on currentPageNo and total thumbnails
-    return currentPageNo * pageSize + pageSize >= total;
+    return Math.ceil(total/pageSize) == (currentPageNo +1)
   };
 
   const getTop = () => {
@@ -87,6 +95,20 @@ const Thumbnails = ({
               </Link>
             );
           })}
+
+        <Link
+          className={`first ${isPreviousDisabled() ? "disabled" : ""}`}
+          title="First"
+          style={{
+            top: getTop(),
+          }}
+          onClick={() => {
+            !isPreviousDisabled() && onFirst();
+          }}
+          to={""}
+        >
+          First
+        </Link>
         <Link
           className={`previous ${isPreviousDisabled() ? "disabled" : ""}`}
           title="Previous"
@@ -112,6 +134,19 @@ const Thumbnails = ({
           to={""}
         >
           Next
+        </Link>
+        <Link
+          className={`last ${isNextDisabled() ? "disabled" : ""}`}
+          title="Last"
+          style={{
+            top: getTop(),
+          }}
+          onClick={() => {
+            !isNextDisabled() && onLast();
+          }}
+          to={""}
+        >
+          Last
         </Link>
       </div>
     </div>
