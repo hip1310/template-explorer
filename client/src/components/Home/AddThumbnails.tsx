@@ -26,11 +26,15 @@ const AddThumbnails = () => {
 
   const addNewTemplate = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    axiosAPI[isEdit ? "put" : "post"]("/home/add", data, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    axiosAPI[isEdit ? "put" : "post"](
+      isEdit ? "/home/update" : "/home/add",
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => {
         if (res.status === 200) {
           toast.success(
@@ -179,7 +183,7 @@ const AddThumbnails = () => {
           </div>
         </div>
         <button className="add-new" name="addNew" type="submit">
-          Add New
+          {isEdit ? "Update" : "Add New"}
         </button>
         <button
           className="cancel margin-left-10-px "

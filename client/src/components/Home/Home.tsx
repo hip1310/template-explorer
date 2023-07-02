@@ -23,6 +23,7 @@ export type queryParamType = {
   searchTitle: string;
   sortBy: "title" | "cost" | "id" | "description" | "thumbnail" | "image";
   sortOrder: "asc" | "desc";
+  pageSize: number;
   currentPageNo: number;
 };
 
@@ -42,6 +43,7 @@ const Home = () => {
     searchTitle: "",
     sortBy: "title",
     sortOrder: "asc",
+    pageSize: CONSTANTS.MAX_THUMBNAILS,
     currentPageNo: 0,
   });
 
@@ -50,7 +52,7 @@ const Home = () => {
       //Creating request params
       const params = new URLSearchParams({
         page: pageNo.toString(),
-        size: CONSTANTS.MAX_THUMBNAILS.toString(),
+        size: queryParams.pageSize.toString(),
         //sort by can be ["title","cost","id","description","thumbnail","image"]
         //sort directions can be asc/desc
         sortBy: queryParams.sortBy + " " + queryParams.sortOrder,
@@ -93,6 +95,7 @@ const Home = () => {
       searchTitle: "",
       sortBy: "title",
       sortOrder: "asc",
+      pageSize: queryParams.pageSize,
       currentPageNo: 0,
     });
   };
@@ -175,6 +178,24 @@ const Home = () => {
                 <option value="desc">Desc</option>
               </select>
             </div>
+            <div className="col-xs-2">
+              <p className="padding-left-10-px">Page Size :</p>
+              <select
+                id="pageSize"
+                className="margin-left-10-px"
+                value={queryParams.pageSize}
+                onChange={(element) => {
+                  onChange(element.target.id, element.target.value);
+                }}
+              >
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </select>
+            </div>
           </div>
           <div className="margin-top-10-px">
             <button
@@ -197,6 +218,7 @@ const Home = () => {
             <Thumbnails
               thumbnails={thumbnails}
               currentPageNo={queryParams.currentPageNo}
+              pageSize={queryParams.pageSize}
               setCurrentPageNo={setCurrentPageNo}
               total={total}
               onClickThumbnail={(element: imageWithMetaType) => {

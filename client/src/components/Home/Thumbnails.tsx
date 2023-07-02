@@ -10,6 +10,7 @@ type thumbnailsType = {
   total: number;
   onClickThumbnail: any;
   currentImageId?: string;
+  pageSize: number;
 };
 
 const Thumbnails = ({
@@ -19,6 +20,7 @@ const Thumbnails = ({
   total,
   onClickThumbnail,
   currentImageId,
+  pageSize,
 }: thumbnailsType) => {
   const onNext = () => {
     //Navigate to next page and will call api
@@ -37,22 +39,24 @@ const Thumbnails = ({
 
   const isNextDisabled = () => {
     //It will disable next button based on currentPageNo and total thumbnails
-    return (
-      currentPageNo * CONSTANTS.MAX_THUMBNAILS + CONSTANTS.MAX_THUMBNAILS >=
-      total
-    );
+    return currentPageNo * pageSize + pageSize >= total;
   };
 
   const getTop = () => {
-    return document.getElementById("thumbnailsGroup")?.clientHeight! /2.5
+    return document.getElementById("thumbnailsGroup")?.clientHeight! / 2.5;
   };
 
   const getWidth = (size: number) => {
-    if (size * CONSTANTS.MAX_THUMBNAILS > document.getElementById("thumbnailsGroup")?.clientWidth!) {
-        return document.getElementById("thumbnailsGroup")?.clientWidth! / CONSTANTS.MAX_THUMBNAILS - 20;
-      } else {
-        return size;
-      }
+    if (
+      size * pageSize >
+      document.getElementById("thumbnailsGroup")?.clientWidth!
+    ) {
+      return (
+        document.getElementById("thumbnailsGroup")?.clientWidth! / pageSize - 20
+      );
+    } else {
+      return size;
+    }
   };
 
   return (
@@ -76,8 +80,8 @@ const Thumbnails = ({
                     require("../../images/thumbnails/" + element.thumbnail)
                   }
                   alt={element.thumbnail}
-                  width={CONSTANTS.MAX_THUMBNAILS > 4 ? getWidth(145) : 145}
-                  height={CONSTANTS.MAX_THUMBNAILS > 4 ? "auto" : 121}
+                  width={pageSize > 4 ? getWidth(145) : 145}
+                  height={pageSize > 4 ? "auto" : 121}
                 />
                 <span>{element.id}</span>
               </Link>
