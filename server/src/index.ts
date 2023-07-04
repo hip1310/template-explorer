@@ -1,7 +1,7 @@
 import express from "express";
 import homeRouter from "./routes/home";
 import pkg from "body-parser";
-import errorHandler from "./exception/error-handler.js";
+import errorHandler from "./exception/ErrorHandler";
 import cors from "cors";
 const { json } = pkg;
 const app = express();

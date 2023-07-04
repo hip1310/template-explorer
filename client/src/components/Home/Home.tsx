@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { axiosAPI } from "../../services";
 import { useNavigate } from "react-router-dom";
-import { CONSTANTS } from "../../utils/constants";
 import Header from "../Header";
 import Footer from "../Footer";
 import Thumbnails from "./Thumbnails";
@@ -43,7 +42,7 @@ const Home = () => {
     searchTitle: "",
     sortBy: "title",
     sortOrder: "asc",
-    pageSize: CONSTANTS.MAX_THUMBNAILS,
+    pageSize: 4,
     currentPageNo: 0,
   });
 

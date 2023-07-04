@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { CONSTANTS } from "../../utils/constants";
 import { imageWithMetaType } from "./Home";
 
 type thumbnailsType = {
@@ -47,7 +46,7 @@ const Thumbnails = ({
 
   const isNextDisabled = () => {
     //It will disable next button based on currentPageNo and total thumbnails
-    return Math.ceil(total/pageSize) == (currentPageNo +1)
+    return Math.ceil(total/pageSize) === (currentPageNo +1)
   };
 
   const getTop = () => {

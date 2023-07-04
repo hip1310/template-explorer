@@ -47,14 +47,17 @@ const AddThumbnails = () => {
           }, 1500);
         }
       })
-      .catch(() => {
-        //If any error occurs during calling api then will navigate to error page
-        navigate("/error");
+      .catch((error) => {
+        if (error?.response?.status === 400) {
+          toast.error(error?.response.data?.error);
+        } else {
+          //If any error occurs during calling api then will navigate to error page
+          navigate("/error");
+        }
       });
   };
 
   useEffect(() => {
-    console.log(isEdit);
     if (isEdit) {
       const callApi = () => {
         axiosAPI
@@ -97,6 +100,8 @@ const AddThumbnails = () => {
               placeholder="Title"
               value={data.title}
               onChange={(element) => onChange("title", element.target.value)}
+              maxLength={500}
+              required
             />
           </div>
         </div>
@@ -104,11 +109,17 @@ const AddThumbnails = () => {
           <div className="col-xs-3">Cost :</div>
           <div className="col-xs-6">
             <input
-              type="number"
+              type="text"
               name="cost"
               placeholder="Cost"
               value={data.cost}
-              onChange={(element) => onChange("cost", element.target.value)}
+              onChange={(element) => {
+                if (!isNaN(Number(element.target.value))) {
+                  onChange("cost", element.target.value);
+                }
+              }}
+              maxLength={10}
+              required
             />
           </div>
         </div>
@@ -179,6 +190,7 @@ const AddThumbnails = () => {
               onChange={(element) =>
                 onChange("description", element.target.value)
               }
+              required
             />
           </div>
         </div>

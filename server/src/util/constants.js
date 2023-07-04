@@ -1,14 +1,5 @@
-module.exports = {
-  INVALID_SORT_COLUMN: {
-    statusCode: 400, // Bad Request
-    message: "Invlid sort by column",
-  },
-  INVALID_SORT_ORDER: {
-    statusCode: 400, // Bad Request
-    message: "Invlid sort order",
-  },
-  INTERNAL_ERROR: {
-    statusCode: 500, // Internal Server Error
-    message: "Internal Server Error",
-  },
-};
+export const INVALID_SORT_COLUMN = "Invlid sort by column";
+export const INVALID_SORT_ORDER = "Invlid sort order";
+export const INTERNAL_ERROR = "Internal Server Error";
+export const ID_NOT_FOUND = "Please enter id";
+export const TITLE_ALREADY_EXIST = "Title already exist";

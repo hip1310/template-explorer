@@ -2,12 +2,17 @@ import "reflect-metadata";
 import { Template } from "../entity/Template";
 import connectionPool from "../configuration/data-source";
 import { Like } from "typeorm";
-import CustomError from "../exception/custom-error";
+import CustomError from "../exception/CustomError";
+import {
+  ID_NOT_FOUND,
+  INVALID_SORT_COLUMN,
+  INVALID_SORT_ORDER,
+  TITLE_ALREADY_EXIST,
+} from "../util/constants";
 
-export const get = async (req: any, res: any) => {
+export const get = async (req: any, res: any, next: any) => {
   const size = req.query?.size ? req.query.size : 10;
   const pageNo = req.query?.page ? req.query.page : 0;
-  const templateRepository = connectionPool.getRepository(Template);
   let title = "";
   let sortOrder = "ASC";
   let sortBy = "title";
@@ -23,19 +28,27 @@ export const get = async (req: any, res: any) => {
       "image",
     ];
     if (!sortByOptions.includes(sortBy?.toLowerCase())) {
-      throw new CustomError("INVALID_SORT_COLUMN");
+      try {
+        throw new CustomError(INVALID_SORT_COLUMN);
+      } catch (error) {
+        next(error);
+      }
     }
 
     sortOrder = sortArray.length > 1 ? sortArray[1] : "asc";
     const sortOrderOptions = ["asc", "desc"];
     if (!sortOrderOptions.includes(sortOrder?.toLowerCase())) {
-      throw new CustomError("INVALID_SORT_ORDER");
+      try {
+        throw new CustomError(INVALID_SORT_ORDER);
+      } catch (error) {
+        next(error);
+      }
     }
     if (req.query?.searchTitle?.trim()) {
       title = req.query.searchTitle.trim();
     }
   }
-
+  const templateRepository = connectionPool.getRepository(Template);
   const [allTemplates, count] = await templateRepository.findAndCount({
     where: { title: Like("%" + title + "%") },
     order: { [sortBy]: sortOrder },
@@ -52,12 +65,16 @@ export const get = async (req: any, res: any) => {
   return data;
 };
 
-export const getById = async (req: any, res: any) => {
+export const getById = async (req: any, res: any, next: any) => {
   const templateRepository = connectionPool.getRepository(Template);
   const id = req.params?.id;
 
   if (!id) {
-    throw new CustomError("ID_NOT_FOUND");
+    try {
+      throw new CustomError(ID_NOT_FOUND);
+    } catch (error) {
+      next(error);
+    }
   }
 
   const data = await templateRepository.findOne({
@@ -68,48 +85,78 @@ export const getById = async (req: any, res: any) => {
   return data;
 };
 
-export const post = (req: any, res: any) => {
+export const post = async (req: any, res: any, next: any) => {
   const templateRepository = connectionPool.getRepository(Template);
   const { title, cost, description, thumbnail, image } = req.body;
-  const template = templateRepository.create({
-    title: title,
-    cost: cost,
-    description: description,
-    thumbnail: thumbnail,
-    image: image,
+  const existingTemplate = await templateRepository.find({
+    where: { title: title },
   });
-  templateRepository.save(template);
-  req.query.page = 0;
-  req.query.size = 4;
-  return get(req, res);
-};
-
-export const put = (req: any, res: any) => {
-  const templateRepository = connectionPool.getRepository(Template);
-  const { id, title, cost, description, thumbnail, image } = req.body;
-  templateRepository.update(
-    {
-      id: id,
-    },
-    {
+  if (existingTemplate.length >= 1) {
+    try {
+      throw new CustomError(TITLE_ALREADY_EXIST);
+    } catch (error) {
+      next(error);
+    }
+  } else {
+    const template = templateRepository.create({
       title: title,
       cost: cost,
       description: description,
       thumbnail: thumbnail,
       image: image,
-    }
-  );
-  req.query.page = 0;
-  req.query.size = 4;
-  return get(req, res);
+    });
+    templateRepository.save(template);
+    req.query.page = 0;
+    req.query.size = 4;
+    return get(req, res, next);
+  }
 };
 
-export const deleteTemplate = async (req: any, res: any) => {
+export const put = async (req: any, res: any, next: any) => {
+  const templateRepository = connectionPool.getRepository(Template);
+  const { id, title, cost, description, thumbnail, image } = req.body;
+  const existingTemplate = await templateRepository.find({
+    where: { title: title },
+  });
+  console.log("existingTemplate",existingTemplate[0].id)
+  console.log("id",id)
+  console.log("existingTemplate123",existingTemplate.length)
+  if (existingTemplate.length >= 1 && existingTemplate[0].id != id) {
+    console.log("inside",123)
+    try {
+      throw new CustomError(TITLE_ALREADY_EXIST);
+    } catch (error) {
+      next(error);
+    }
+  }else{
+    templateRepository.update(
+      {
+        id: id,
+      },
+      {
+        title: title,
+        cost: cost,
+        description: description,
+        thumbnail: thumbnail,
+        image: image,
+      }
+    );
+    req.query.page = 0;
+    req.query.size = 4;
+    return get(req, res, next);
+  }
+};
+
+export const deleteTemplate = async (req: any, res: any, next: any) => {
   const templateRepository = connectionPool.getRepository(Template);
   const id = req.params?.id;
 
   if (!id) {
-    throw new CustomError("ID_NOT_FOUND");
+    try {
+      throw new CustomError(ID_NOT_FOUND);
+    } catch (error) {
+      next(error);
+    }
   }
 
   await templateRepository.delete({
@@ -117,5 +164,5 @@ export const deleteTemplate = async (req: any, res: any) => {
   });
   req.query.page = 0;
   req.query.size = 4;
-  return get(req, res);
+  return get(req, res, next);
 };

@@ -54,6 +54,7 @@ header {
 	font-size: 12px;
 	margin: 0;
 	padding: 7px 0;
+	word-break: break-all;
 }
 
 .details strong {
