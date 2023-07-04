@@ -118,11 +118,7 @@ export const put = async (req: any, res: any, next: any) => {
   const existingTemplate = await templateRepository.find({
     where: { title: title },
   });
-  console.log("existingTemplate",existingTemplate[0].id)
-  console.log("id",id)
-  console.log("existingTemplate123",existingTemplate.length)
   if (existingTemplate.length >= 1 && existingTemplate[0].id != id) {
-    console.log("inside",123)
     try {
       throw new CustomError(TITLE_ALREADY_EXIST);
     } catch (error) {
