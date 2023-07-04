@@ -1,3 +1,10 @@
 {
-    "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
-  }
+    "version": 1,
+    "name": "mentorg",
+    "builds": [
+       { "src": "/src/index.ts", "use": "@vercel/node" }
+    ],
+    "routes": [
+       { "src": "/(.*)", "dest": "/src/index.ts" }
+    ]
+ }
