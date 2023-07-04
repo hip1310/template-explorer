@@ -1,7 +1,3 @@
 {
-    "functions": {
-      "api/test.php": {
-        "runtime": "vercel-php@0.5.2"
-      }
-    }
+    "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
   }
