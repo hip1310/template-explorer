@@ -1,9 +1,4 @@
 {
-    "functions": {
-      "api/**/*": {
-        "memory": 512
-      }
-    },
     "routes": [
       {
         "src": "/api/(.*)",
