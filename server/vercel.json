@@ -1,10 +1,14 @@
 {
-    "version": 1,
-    "name": "mentorg",
-    "builds": [
-       { "src": "/src/index.ts", "use": "@vercel/node" }
-    ],
+    "functions": {
+      "api/**/*": {
+        "memory": 512
+      }
+    },
     "routes": [
-       { "src": "/(.*)", "dest": "/src/index.ts" }
+      {
+        "src": "/api/(.*)",
+        "dest": "api/$1"
+      }
     ]
- }
+  }
+  
