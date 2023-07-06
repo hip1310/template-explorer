@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Template } from "../entity/Template";
-import connectionPool from "../configuration/data-source";
+import connectionPool from "../data-source";
 import { Like } from "typeorm";
 import CustomError from "../exception/CustomError";
 import {

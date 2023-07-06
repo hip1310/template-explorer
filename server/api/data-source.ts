@@ -1,6 +1,6 @@
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import { Template } from "../entity/Template";
+import { Template } from "./entity/Template";
 config();
 
 const connectionPool = new DataSource({
