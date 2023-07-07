@@ -1,6 +1,5 @@
 import { config } from "dotenv";
 import { DataSource } from "typeorm";
-import { Template } from "./entity/Template";
 config();
 
 const connectionPool = new DataSource({
@@ -10,7 +9,7 @@ const connectionPool = new DataSource({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT),
-  entities: [Template],
+  entities: [__dirname + "/entity/*.{js,ts}"],
   ssl: process.env.DB_USERNAME === "mentorguser" ? true : false,
 });
 
