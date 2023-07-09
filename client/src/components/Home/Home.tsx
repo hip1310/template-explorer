@@ -100,24 +100,27 @@ const Home = () => {
   };
 
   const onDeleteThumbnail = () => {
-    axiosAPI
-      .delete(`/home/delete/${currentImage?.id?.toString()}`)
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success("Template deleted successfully!");
-          const thumbnails = res?.data?.data || [];
-          //set new thumbnails according to pagination
-          setThumbnails(thumbnails);
-          //select 1st thumbnail
-          setCurrentImage(thumbnails.length > 0 ? thumbnails[0] : {});
-          //set total records in thumbnails
-          setTotal(res?.data?.total);
-        }
-      })
-      .catch(() => {
-        //If any error occurs during calling api then will navigate to error page
-        navigate("/error");
-      });
+    if (window.confirm("Are you sure to delete "+currentImage.title+" ?")) {
+      axiosAPI
+        .delete(`/home/delete/${currentImage?.id?.toString()}`)
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success("Template deleted successfully!");
+            const thumbnails = res?.data?.data || [];
+            //set new thumbnails according to pagination
+            setThumbnails(thumbnails);
+            //select 1st thumbnail
+            setCurrentImage(thumbnails.length > 0 ? thumbnails[0] : {});
+            setCurrentPageNo(0);
+            //set total records in thumbnails
+            setTotal(res?.data?.total);
+          }
+        })
+        .catch(() => {
+          //If any error occurs during calling api then will navigate to error page
+          navigate("/error");
+        });
+    }
   };
 
   return (
