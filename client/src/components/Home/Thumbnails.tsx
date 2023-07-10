@@ -10,6 +10,8 @@ type thumbnailsType = {
   onClickThumbnail: any;
   currentImageId?: string;
   pageSize: number;
+  onSelect: any;
+  checked: number[];
 };
 
 const Thumbnails = ({
@@ -20,6 +22,8 @@ const Thumbnails = ({
   onClickThumbnail,
   currentImageId,
   pageSize,
+  onSelect,
+  checked,
 }: thumbnailsType) => {
   const onFirst = () => {
     //Navigate to first page and will call api
@@ -46,7 +50,7 @@ const Thumbnails = ({
 
   const isNextDisabled = () => {
     //It will disable next button based on currentPageNo and total thumbnails
-    return Math.ceil(total/pageSize) === (currentPageNo +1)
+    return Math.ceil(total / pageSize) === currentPageNo + 1;
   };
 
   const getTop = () => {
@@ -90,6 +94,17 @@ const Thumbnails = ({
                   width={pageSize > 4 ? getWidth(145) : 145}
                   height={pageSize > 4 ? "auto" : 121}
                 />
+                <button
+                  id={element.id}
+                  onClick={() => {
+                    onSelect(element.id, !checked.includes(Number(element.id)));
+                  }}
+                  className={`selectButton margin-right-5-px ${
+                    checked.includes(Number(element.id)) ? "selectedButton" : ""
+                  }`}
+                >
+                  Select
+                </button>
                 <span>{element.id}</span>
               </Link>
             );

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { Template } from "../entity/Template";
 import connectionPool from "../data-source";
-import { Like } from "typeorm";
+import { In, Like } from "typeorm";
 import CustomError from "../exception/CustomError";
 import {
   ID_NOT_FOUND,
@@ -124,7 +124,7 @@ export const put = async (req: any, res: any, next: any) => {
     } catch (error) {
       next(error);
     }
-  }else{
+  } else {
     templateRepository.update(
       {
         id: id,
@@ -145,9 +145,7 @@ export const put = async (req: any, res: any, next: any) => {
 
 export const deleteTemplate = async (req: any, res: any, next: any) => {
   const templateRepository = connectionPool.getRepository(Template);
-  const id = req.params?.id;
-
-  if (!id) {
+  if (req.body?.length === 0) {
     try {
       throw new CustomError(ID_NOT_FOUND);
     } catch (error) {
@@ -156,7 +154,7 @@ export const deleteTemplate = async (req: any, res: any, next: any) => {
   }
 
   await templateRepository.delete({
-    id: id,
+    id: In(req.body),
   });
   req.query.page = 0;
   req.query.size = 4;

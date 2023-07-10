@@ -6,6 +6,6 @@ router.get("/", [get]);
 router.get("/getById/:id", [getById]);
 router.post("/add", [post]);
 router.put("/update", [put]);
-router.delete("/delete/:id", [deleteTemplate]);
+router.patch("/delete", [deleteTemplate]);
 
 export default router;

@@ -110,3 +110,22 @@ button {
 .display-inline-block {
   display: inline-block;
 }
+
+.selectButton {
+  padding: 0px 11px;
+  background: #eee;
+  border-radius: 22px;
+  font-weight: bold;
+  font-size: 12px;
+  color: #777;
+  border: none;
+}
+
+.selectedButton {
+  background-color: #286090;
+  color: white;
+}
+
+.margin-right-5-px {
+  margin-right: 5px;
+}

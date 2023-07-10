@@ -35,7 +35,7 @@ const Home = () => {
     thumbnail: "",
     image: "",
   });
-  const [thumbnails, setThumbnails] = useState([]);
+  const [thumbnails, setThumbnails] = useState<imageWithMetaType[]>([]);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
   const [queryParams, setQueryParams] = useState<queryParamType>({
@@ -45,6 +45,7 @@ const Home = () => {
     pageSize: 4,
     currentPageNo: 0,
   });
+  const [checked, setChecked] = useState<number[]>([]);
 
   useEffect(() => {
     const callApi = (pageNo: number) => {
@@ -100,9 +101,9 @@ const Home = () => {
   };
 
   const onDeleteThumbnail = () => {
-    if (window.confirm("Are you sure to delete "+currentImage.title+" ?")) {
+    if (window.confirm("Are you sure to delete selected items ?")) {
       axiosAPI
-        .delete(`/home/delete/${currentImage?.id?.toString()}`)
+        .patch(`/home/delete`, checked)
         .then((res) => {
           if (res.status === 200) {
             toast.success("Template deleted successfully!");
@@ -112,6 +113,7 @@ const Home = () => {
             //select 1st thumbnail
             setCurrentImage(thumbnails.length > 0 ? thumbnails[0] : {});
             setCurrentPageNo(0);
+            setChecked([]);
             //set total records in thumbnails
             setTotal(res?.data?.total);
           }
@@ -121,6 +123,23 @@ const Home = () => {
           navigate("/error");
         });
     }
+  };
+
+  const onSelect = (id: number, value: boolean) => {
+    let checkedIds = [...checked];
+    if (value) {
+      if (!checkedIds.includes(id)) {
+        checkedIds.push(id);
+      }
+    } else {
+      if (checkedIds.includes(id)) {
+        const index = checkedIds.indexOf(id);
+        if (index > -1) {
+          checkedIds.splice(index, 1);
+        }
+      }
+    }
+    setChecked(checkedIds);
   };
 
   return (
@@ -227,6 +246,8 @@ const Home = () => {
                 setCurrentImage(element);
               }}
               currentImageId={currentImage.id}
+              onSelect={onSelect}
+              checked={checked}
             />
           </>
         ) : (
