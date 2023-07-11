@@ -114,7 +114,7 @@ export const post = async (req: any, res: any, next: any) => {
 
 export const put = async (req: any, res: any, next: any) => {
   const templateRepository = connectionPool.getRepository(Template);
-  const { id, title, cost, description, thumbnail, image } = req.body;
+  let { id, title, cost, description, thumbnail, image } = req.body;
   const existingTemplate = await templateRepository.find({
     where: { title: title },
   });
@@ -125,6 +125,13 @@ export const put = async (req: any, res: any, next: any) => {
       next(error);
     }
   } else {
+    if (!thumbnail.includes("data:image")) {
+      thumbnail = existingTemplate[0].thumbnail;
+    }
+
+    if (!image.includes("data:image")) {
+      image = existingTemplate[0].image;
+    }
     templateRepository.update(
       {
         id: id,

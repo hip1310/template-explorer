@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { imageWithMetaType } from "./Home";
+import { getSrc } from "../CommonMethods";
 
 type thumbnailsType = {
   thumbnails: imageWithMetaType[];
@@ -86,10 +87,7 @@ const Thumbnails = ({
                 to={""}
               >
                 <img
-                  src={
-                    element.thumbnail &&
-                    require("../../images/thumbnails/" + element.thumbnail)
-                  }
+                  src={getSrc(element.thumbnail, "thumbnails")}
                   alt={element.thumbnail}
                   width={pageSize > 4 ? getWidth(145) : 145}
                   height={pageSize > 4 ? "auto" : 121}

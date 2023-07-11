@@ -3,21 +3,27 @@ import { useNavigate, useParams } from "react-router-dom";
 import { axiosAPI } from "../../services";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fileExtension } from "../CommonMethods";
 
 const AddThumbnails = () => {
   type AddThumbnailsType = {
+    id?: string;
     title: string;
     cost: string;
     description: string;
     thumbnail: string;
+    thumbnailName: string;
     image: string;
+    imageName: string;
   };
   const [data, setData] = useState<AddThumbnailsType>({
     title: "",
     cost: "",
     description: "",
-    thumbnail: "7111-m.jpg",
-    image: "7111-b.jpg",
+    thumbnail: "",
+    thumbnailName: "",
+    image: "",
+    imageName: "",
   });
 
   const navigate = useNavigate();
@@ -65,6 +71,18 @@ const AddThumbnails = () => {
           .then((res) => {
             if (res.status === 200) {
               const data = res?.data || {};
+              if (data.thumbnail.includes("data:image")) {
+                data.thumbnailName =
+                  data.id + "-m." + fileExtension(data.thumbnail);
+              } else {
+                data.thumbnailName = data.thumbnail;
+              }
+
+              if (data.image.includes("data:image")) {
+                data.imageName = data.id + "-m." + fileExtension(data.image);
+              } else {
+                data.imageName = data.image;
+              }
               setData(data);
             }
           })
@@ -75,10 +93,34 @@ const AddThumbnails = () => {
       };
       callApi();
     }
-  }, []);
+  }, [isEdit, navigate]);
 
-  const onChange = (key: string, value: string) => {
+  const onChange = (key: string, value: string | any) => {
     setData({ ...data, [key]: value });
+  };
+
+  const onChangeImage = (key: string, event: any) => {
+    const selectedfile = event.target.files;
+    if (Number((selectedfile[0].size / 1024).toFixed(2)) > 5) {
+      toast.error("Max image size is 5 kb");
+    } else {
+      if (selectedfile.length > 0) {
+        const [imageFile] = selectedfile;
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          const srcData = fileReader.result;
+          const spllitedArrayOfName = (
+            document.getElementById("file-input-" + key) as HTMLInputElement
+          )?.value.split("\\");
+          setData({
+            ...data,
+            [key]: srcData,
+            [key + "Name"]: spllitedArrayOfName[spllitedArrayOfName.length - 1],
+          });
+        };
+        fileReader.readAsDataURL(imageFile);
+      }
+    }
   };
   return (
     <>
@@ -126,57 +168,36 @@ const AddThumbnails = () => {
         <div className="row">
           <div className="col-xs-3">Thumbnail name :</div>
           <div className="col-xs-6">
-            <select
-              className="margin-bottom-10-px"
-              value={data.thumbnail}
-              onChange={(element) => {
-                onChange("thumbnail", element.target.value);
+            <input
+              type="file"
+              accept="image/*"
+              id="file-input-thumbnail"
+              onChange={(event) => {
+                onChangeImage("thumbnail", event);
               }}
+            />
+            <label
+              id="file-input-thumbnail-label"
+              htmlFor="file-input-thumbnail"
             >
-              <option value="7111-m.jpg">7111-m.jpg</option>
-              <option value="7112-m.jpg">7112-m.jpg</option>
-              <option value="7118-m.jpg">7118-m.jpg</option>
-              <option value="7124-m.jpg">7124-m.jpg</option>
-              <option value="7130-m.jpg">7130-m.jpg</option>
-              <option value="7131-m.jpg">7131-m.jpg</option>
-              <option value="7141-m.jpg">7141-m.jpg</option>
-              <option value="7143-m.jpg">7143-m.jpg</option>
-              <option value="7147-m.jpg">7147-m.jpg</option>
-              <option value="7150-m.jpg">7150-m.jpg</option>
-              <option value="7152-m.jpg">7152-m.jpg</option>
-              <option value="7155-m.jpg">7155-m.jpg</option>
-              <option value="7160-m.jpg">7160-m.jpg</option>
-              <option value="7162-m.jpg">7162-m.jpg</option>
-              <option value="7164-m.jpg">7164-m.jpg</option>
-            </select>
+              {data.thumbnailName ? data.thumbnailName : "Choose File"}
+            </label>
           </div>
         </div>
         <div className="row">
           <div className="col-xs-3">Image name :</div>
           <div className="col-xs-6">
-            <select
-              className="margin-bottom-10-px"
-              value={data.image}
-              onChange={(element) => {
-                onChange("image", element.target.value);
+            <input
+              type="file"
+              accept="image/*"
+              id="file-input-image"
+              onChange={(event) => {
+                onChangeImage("image", event);
               }}
-            >
-              <option value="7111-b.jpg">7111-b.jpg</option>
-              <option value="7112-b.jpg">7112-b.jpg</option>
-              <option value="7118-b.jpg">7118-b.jpg</option>
-              <option value="7124-b.jpg">7124-b.jpg</option>
-              <option value="7130-b.jpg">7130-b.jpg</option>
-              <option value="7131-b.jpg">7131-b.jpg</option>
-              <option value="7141-b.jpg">7141-b.jpg</option>
-              <option value="7143-b.jpg">7143-b.jpg</option>
-              <option value="7147-b.jpg">7147-b.jpg</option>
-              <option value="7150-b.jpg">7150-b.jpg</option>
-              <option value="7152-b.jpg">7152-b.jpg</option>
-              <option value="7155-b.jpg">7155-b.jpg</option>
-              <option value="7160-b.jpg">7160-b.jpg</option>
-              <option value="7162-b.jpg">7162-b.jpg</option>
-              <option value="7164-b.jpg">7164-b.jpg</option>
-            </select>
+            />
+            <label id="file-input-image-label" htmlFor="file-input-image">
+              {data.imageName ? data.imageName : "Choose File"}
+            </label>
           </div>
         </div>
         <div className="row">

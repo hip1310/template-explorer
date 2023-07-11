@@ -1,6 +1,7 @@
 import React from "react";
 import { imageWithMetaType } from "./Home";
 import { useNavigate } from "react-router-dom";
+import { fileExtension, getSrc } from "../CommonMethods";
 
 const renderMeta = (key: string, value: string) => {
   return (
@@ -12,14 +13,12 @@ const renderMeta = (key: string, value: string) => {
 
 const ImageWithMeta = (currentImage: imageWithMetaType) => {
   const navigate = useNavigate();
+
   return (
     <div id="large">
       <div className="group">
         <img
-          src={
-            currentImage.image &&
-            require("../../images/large/" + currentImage.image)
-          }
+          src={getSrc(currentImage.image, "large")}
           alt={currentImage.image}
           width="430"
           height="360"
@@ -29,8 +28,19 @@ const ImageWithMeta = (currentImage: imageWithMetaType) => {
           {renderMeta("Description", currentImage.description)}
           {renderMeta("Cost", currentImage.cost)}
           {renderMeta("ID #", currentImage.id)}
-          {renderMeta("Thumbnail File", currentImage.thumbnail)}
-          {renderMeta("Large Image File", currentImage.image)}
+          {renderMeta(
+            "Thumbnail File",
+            currentImage.thumbnail &&
+              currentImage.thumbnail.includes("data:image")
+              ? currentImage.id + "-m." + fileExtension(currentImage.thumbnail)
+              : currentImage.thumbnail
+          )}
+          {renderMeta(
+            "Large Image File",
+            currentImage.image && currentImage.image.includes("data:image")
+              ? currentImage.id + "-b." + fileExtension(currentImage.image)
+              : currentImage.image
+          )}
         </div>
         <div className="display-inline-block">
           <button
