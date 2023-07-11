@@ -101,7 +101,9 @@ const Home = () => {
   };
 
   const onDeleteThumbnail = () => {
-    if (window.confirm("Are you sure to delete selected items ?")) {
+    if (checked.length === 0) {
+      alert("please select at least one item");
+    } else if (window.confirm("Are you sure to delete selected items ?")) {
       axiosAPI
         .patch(`/home/delete`, checked)
         .then((res) => {
