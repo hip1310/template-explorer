@@ -26,41 +26,62 @@ const AddThumbnails = () => {
     imageName: "",
   });
 
+  const [error, setError] = useState<any>({});
   const navigate = useNavigate();
   const params = useParams();
   const isEdit = params.id;
 
   const addNewTemplate = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    axiosAPI[isEdit ? "put" : "post"](
-      isEdit ? "/home/update" : "/home/add",
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          toast.success(
-            isEdit
-              ? "Template updated successfully!"
-              : "Template added successfully!"
-          );
-          setTimeout(() => {
-            navigate("/");
-          }, 1500);
+    let errorData: any = {};
+    if (!data.title) {
+      errorData.title = "Please enter title";
+    }
+    if (!data.cost) {
+      errorData.cost = "Please enter cost";
+    }
+    if (!data.description) {
+      errorData.description = "Please enter description";
+    }
+    if (!data.thumbnailName) {
+      errorData.thumbnailName = "Please select image";
+    }
+    if (!data.imageName) {
+      errorData.imageName = "Please select image";
+    }
+
+    setError(errorData);
+    if (Object.keys(errorData).length === 0) {
+      axiosAPI[isEdit ? "put" : "post"](
+        isEdit ? "/home/update" : "/home/add",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      })
-      .catch((error) => {
-        if (error?.response?.status === 400) {
-          toast.error(error?.response.data?.error);
-        } else {
-          //If any error occurs during calling api then will navigate to error page
-          navigate("/error");
-        }
-      });
+      )
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success(
+              isEdit
+                ? "Template updated successfully!"
+                : "Template added successfully!"
+            );
+            setTimeout(() => {
+              navigate("/");
+            }, 1500);
+          }
+        })
+        .catch((error) => {
+          if (error?.response?.status === 400) {
+            toast.error(error?.response.data?.error);
+          } else {
+            //If any error occurs during calling api then will navigate to error page
+            navigate("/error");
+          }
+        });
+    }
   };
 
   useEffect(() => {
@@ -97,6 +118,9 @@ const AddThumbnails = () => {
 
   const onChange = (key: string, value: string | any) => {
     setData({ ...data, [key]: value });
+    const errorData = { ...error };
+    delete errorData[key];
+    setError(errorData);
   };
 
   const onChangeImage = (key: string, event: any) => {
@@ -117,6 +141,9 @@ const AddThumbnails = () => {
             [key]: srcData,
             [key + "Name"]: spllitedArrayOfName[spllitedArrayOfName.length - 1],
           });
+          const errorData = { ...error };
+          delete errorData[key + "Name"];
+          setError(errorData);
         };
         fileReader.readAsDataURL(imageFile);
       }
@@ -143,8 +170,9 @@ const AddThumbnails = () => {
               value={data.title}
               onChange={(element) => onChange("title", element.target.value)}
               maxLength={500}
-              required
+              className={`${error.title ? "errorInput" : ""}`}
             />
+            <div className="error">{error.title}</div>
           </div>
         </div>
         <div className="row">
@@ -161,8 +189,9 @@ const AddThumbnails = () => {
                 }
               }}
               maxLength={10}
-              required
+              className={`${error.cost ? "errorInput" : ""}`}
             />
+            <div className="error">{error.cost}</div>
           </div>
         </div>
         <div className="row">
@@ -179,9 +208,11 @@ const AddThumbnails = () => {
             <label
               id="file-input-thumbnail-label"
               htmlFor="file-input-thumbnail"
+              className={`${error.thumbnailName ? "errorInput" : ""}`}
             >
               {data.thumbnailName ? data.thumbnailName : "Choose File"}
             </label>
+            <div className="error">{error.thumbnailName}</div>
           </div>
         </div>
         <div className="row">
@@ -195,9 +226,14 @@ const AddThumbnails = () => {
                 onChangeImage("image", event);
               }}
             />
-            <label id="file-input-image-label" htmlFor="file-input-image">
+            <label
+              id="file-input-image-label"
+              htmlFor="file-input-image"
+              className={`${error.imageName ? "errorInput" : ""}`}
+            >
               {data.imageName ? data.imageName : "Choose File"}
             </label>
+            <div className="error">{error.imageName}</div>
           </div>
         </div>
         <div className="row">
@@ -211,8 +247,11 @@ const AddThumbnails = () => {
               onChange={(element) =>
                 onChange("description", element.target.value)
               }
-              required
+              className={`${error.description ? "errorInput" : ""}`}
             />
+            <div className="error margin-top-minus-7-px">
+              {error.description}
+            </div>
           </div>
         </div>
         <button className="add-new" name="addNew" type="submit">

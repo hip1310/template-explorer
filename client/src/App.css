@@ -130,6 +130,10 @@ button {
   margin-right: 5px;
 }
 
+.margin-top-minus-7-px{
+  margin-top: -7px !important;
+}
+
 .padding-5-px{
   padding: 0 5px 
 }
@@ -150,4 +154,15 @@ button {
   padding-right: 5px;
   margin-bottom: 10px;
   cursor: pointer;
+}
+
+.error{
+  margin-top: -10px;
+    color: red;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.errorInput{
+  border: red solid 1px !important;
 }
