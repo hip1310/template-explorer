@@ -1,7 +1,7 @@
 import React from "react";
 
 const Header = () => {
-  return <header>Code Development Project</header>;
+  return <header>Looking for templates? Explore here...</header>;
 };
 
 export default Header;
