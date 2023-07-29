@@ -1,4 +1,4 @@
-# MENTORG #
+# Template Explorer #
 Project contains client and server both.
 
 ## Software Dependencies / Prerequisites
