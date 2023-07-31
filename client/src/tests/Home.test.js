@@ -11,6 +11,6 @@ test("Test to home page render", () => {
       </Suspense>
     </BrowserRouter>
   );
-  const name = getByText(container, "Code Development Project");
+  const name = getByText(container, "Template Explorer");
   expect(name).toBeInTheDocument();
 });
