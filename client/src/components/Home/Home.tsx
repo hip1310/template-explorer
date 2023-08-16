@@ -46,9 +46,11 @@ const Home = () => {
     currentPageNo: 0,
   });
   const [checked, setChecked] = useState<number[]>([]);
+  const [isLoading, setIsloading] = useState<boolean>(false);
 
   useEffect(() => {
     const callApi = (pageNo: number) => {
+      setIsloading(true);
       //Creating request params
       const params = new URLSearchParams({
         page: pageNo.toString(),
@@ -63,6 +65,7 @@ const Home = () => {
       axiosAPI
         .get(`/home?${params.toString()}`)
         .then((res) => {
+          setIsloading(false);
           if (res.status === 200) {
             const thumbnails = res?.data?.data || [];
             //set new thumbnails according to pagination
@@ -144,7 +147,9 @@ const Home = () => {
     setChecked(checkedIds);
   };
 
-  return (
+  return isLoading ? (
+    <h1>Loading...</h1>
+  ) : (
     <div id="container">
       <Header />
       <ToastContainer />
