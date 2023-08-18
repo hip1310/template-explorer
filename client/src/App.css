@@ -111,6 +111,10 @@ button {
   display: inline-block;
 }
 
+.display-inline-flex{
+  display: inline-flex;
+}
+
 .selectButton {
   padding: 0px 11px;
   background: #eee;
@@ -165,4 +169,12 @@ button {
 
 .errorInput{
   border: red solid 1px !important;
+}
+
+.float-left{
+  float: left;
+}
+
+.float-right{
+  float:right
 }

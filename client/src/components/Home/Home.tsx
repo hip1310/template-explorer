@@ -7,6 +7,7 @@ import Thumbnails from "./Thumbnails";
 import ImageWithMeta from "./ImageWithMeta";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../Loader";
 
 export type imageWithMetaType = {
   title: string;
@@ -147,121 +148,128 @@ const Home = () => {
     setChecked(checkedIds);
   };
 
-  return isLoading ? (
-    <h1>Loading...</h1>
-  ) : (
+  return (
     <div id="container">
       <Header />
-      <ToastContainer />
-      <div id="main" role="main">
-        <div className="text-align-right">
-          <button onClick={() => navigate("/add")} className="margin-top-10-px">
-            Add Thumbnail
-          </button>
-        </div>
-        <h3 className="padding-left-10-px">Filters</h3>
-        <div className="text-align-left margin-top-10-px">
-          <div className="row">
-            <div className="col-xs-6">
-              <p className="padding-left-10-px">Search Title :</p>
-              <input
-                id="searchTitle"
-                type="text"
-                className="margin-left-10-px"
-                value={queryParams.searchTitle}
-                onChange={(element) => {
-                  onChange(element.target.id, element.target.value);
-                }}
-              />
-            </div>
-            <div className="col-xs-2">
-              <p className="padding-left-10-px">Sort by :</p>
-              <select
-                id="sortBy"
-                className="margin-left-10-px margin-right-10-px"
-                value={queryParams.sortBy}
-                onChange={(element) => {
-                  onChange(element.target.id, element.target.value);
-                }}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <ToastContainer />
+          <div id="main" role="main">
+            <div className="text-align-right">
+              <button
+                onClick={() => navigate("/add")}
+                className="margin-top-10-px"
               >
-                <option value="title">Title</option>
-                <option value="cost">Cost</option>
-                <option value="id">Id</option>
-                <option value="description">Description</option>
-                <option value="thumbnail">Thumbnail</option>
-                <option value="image">Image</option>
-              </select>
+                Add Thumbnail
+              </button>
             </div>
-            <div className="col-xs-2">
-              <p className="padding-left-10-px">Sort order :</p>
-              <select
-                id="sortOrder"
-                className="margin-left-10-px"
-                value={queryParams.sortOrder}
-                onChange={(element) => {
-                  onChange(element.target.id, element.target.value);
-                }}
-              >
-                <option value="asc">Asc</option>
-                <option value="desc">Desc</option>
-              </select>
+            <h3 className="padding-left-10-px">Filters</h3>
+            <div className="text-align-left margin-top-10-px">
+              <div className="row">
+                <div className="col-xs-6">
+                  <p className="padding-left-10-px">Search Title :</p>
+                  <input
+                    id="searchTitle"
+                    type="text"
+                    className="margin-left-10-px"
+                    value={queryParams.searchTitle}
+                    onChange={(element) => {
+                      onChange(element.target.id, element.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col-xs-2">
+                  <p className="padding-left-10-px">Sort by :</p>
+                  <select
+                    id="sortBy"
+                    className="margin-left-10-px margin-right-10-px"
+                    value={queryParams.sortBy}
+                    onChange={(element) => {
+                      onChange(element.target.id, element.target.value);
+                    }}
+                  >
+                    <option value="title">Title</option>
+                    <option value="cost">Cost</option>
+                    <option value="id">Id</option>
+                    <option value="description">Description</option>
+                    <option value="thumbnail">Thumbnail</option>
+                    <option value="image">Image</option>
+                  </select>
+                </div>
+                <div className="col-xs-2">
+                  <p className="padding-left-10-px">Sort order :</p>
+                  <select
+                    id="sortOrder"
+                    className="margin-left-10-px"
+                    value={queryParams.sortOrder}
+                    onChange={(element) => {
+                      onChange(element.target.id, element.target.value);
+                    }}
+                  >
+                    <option value="asc">Asc</option>
+                    <option value="desc">Desc</option>
+                  </select>
+                </div>
+                <div className="col-xs-2">
+                  <p className="padding-left-10-px">Page Size :</p>
+                  <select
+                    id="pageSize"
+                    className="margin-left-10-px"
+                    value={queryParams.pageSize}
+                    onChange={(element) => {
+                      onChange(element.target.id, element.target.value);
+                    }}
+                  >
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                  </select>
+                </div>
+              </div>
+              <div className="margin-top-10-px">
+                <button
+                  className="margin-left-50-percent"
+                  onClick={() => {
+                    onReset();
+                  }}
+                >
+                  Reset All
+                </button>
+              </div>
             </div>
-            <div className="col-xs-2">
-              <p className="padding-left-10-px">Page Size :</p>
-              <select
-                id="pageSize"
-                className="margin-left-10-px"
-                value={queryParams.pageSize}
-                onChange={(element) => {
-                  onChange(element.target.id, element.target.value);
-                }}
-              >
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-              </select>
-            </div>
-          </div>
-          <div className="margin-top-10-px">
-            <button
-              className="margin-left-50-percent"
-              onClick={() => {
-                onReset();
-              }}
-            >
-              Reset All
-            </button>
-          </div>
-        </div>
 
-        {thumbnails.length > 0 ? (
-          <>
-            <ImageWithMeta
-              {...currentImage}
-              onDeleteThumbnail={onDeleteThumbnail}
-            />
-            <Thumbnails
-              thumbnails={thumbnails}
-              currentPageNo={queryParams.currentPageNo}
-              pageSize={queryParams.pageSize}
-              setCurrentPageNo={setCurrentPageNo}
-              total={total}
-              onClickThumbnail={(element: imageWithMetaType) => {
-                setCurrentImage(element);
-              }}
-              currentImageId={currentImage.id}
-              onSelect={onSelect}
-              checked={checked}
-            />
-          </>
-        ) : (
-          <>No Data found</>
-        )}
-      </div>
-      <Footer />
+            {thumbnails.length > 0 ? (
+              <>
+                <ImageWithMeta
+                  {...currentImage}
+                  onDeleteThumbnail={onDeleteThumbnail}
+                />
+                <Thumbnails
+                  thumbnails={thumbnails}
+                  currentPageNo={queryParams.currentPageNo}
+                  pageSize={queryParams.pageSize}
+                  setCurrentPageNo={setCurrentPageNo}
+                  total={total}
+                  onClickThumbnail={(element: imageWithMetaType) => {
+                    setCurrentImage(element);
+                  }}
+                  currentImageId={currentImage.id}
+                  onSelect={onSelect}
+                  checked={checked}
+                />
+              </>
+            ) : (
+              <>No Data found</>
+            )}
+          </div>
+          <Footer />
+        </>
+      )}
     </div>
   );
 };
