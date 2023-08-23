@@ -7,6 +7,7 @@ import ThumbnailsSkeleton from "./components/Skeleton/ThumbnailsSkeleton";
 const Loader = () => {
   return (
     <div id="main" role="main">
+      <h5>Loading... Suffering from pain of using free hosting, Initial load taking too long</h5>
       <div className="text-align-right">
         <SkeletonButton className="margin-top-10-px" />
       </div>
